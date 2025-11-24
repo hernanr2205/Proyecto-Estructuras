@@ -8,14 +8,7 @@
 #include <string>
 
 /**
- * Clase Juego - Motor principal del juego
- *
- * Coordina todos los componentes:
- * - Tablero (lista enlazada)
- * - Jugador (posición y puntaje)
- * - Pila de tesoros
- * - Tabla hash de puntajes
- *
+ * Clase Juego: es el archivo principal es como el motor
  * Maneja la lógica del juego, movimientos, efectos de tesoros y menús
  */
 class Juego {

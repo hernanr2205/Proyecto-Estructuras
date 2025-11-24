@@ -1,7 +1,6 @@
 #include "Juego.h"
 
 /**
- * Punto de entrada del programa
  * Crea el juego y lo inicia
  */
 int main() {

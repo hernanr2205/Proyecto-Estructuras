@@ -2,21 +2,21 @@
 #include <iostream>
 
 /**
- * Agrega un tesoro al tope de la pila
+ * Agrega un tesoro a la pila
  */
 void PilaTesoros::push(const Tesoro& t) {
     pila.push(t);
 }
 
 /**
- * Retorna el tesoro en el tope sin sacarlo
+ * Retorna el tesoro sin sacarlo
  */
 Tesoro PilaTesoros::top() const {
     return pila.top();
 }
 
 /**
- * Elimina el tesoro del tope
+ * Elimina el tesoro
  */
 void PilaTesoros::pop() {
     if (!pila.empty()) {
@@ -40,7 +40,6 @@ int PilaTesoros::size() const {
 
 /**
  * Muestra todos los tesoros en la pila
- * Formato visual según el enunciado
  */
 void PilaTesoros::mostrar() const {
     if (pila.empty()) {
@@ -48,7 +47,7 @@ void PilaTesoros::mostrar() const {
         return;
     }
 
-    // Crear una copia para no modificar la original
+
     std::stack<Tesoro> temp = pila;
     std::stack<Tesoro> invertida;
 

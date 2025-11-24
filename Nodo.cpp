@@ -8,7 +8,7 @@ Nodo::Nodo(int f, int c)
     : fila(f), columna(c), simbolo('o'), descubierta(false),
       tieneTesoro(false), tipoTesoro(""),
       arriba(nullptr), abajo(nullptr), izquierda(nullptr), derecha(nullptr),
-      esMuroReal(false) {  // NUEVO: inicializar en false
+      esMuroReal(false) {  //  inicializar en false
 }
 
 /**

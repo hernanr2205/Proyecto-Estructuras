@@ -5,12 +5,12 @@
 #include "Nodo.h"
 
 /**
- * Clase Jugador - Representa al jugador del juego
+ * Clase Jugador Representa al jugador del juego
  *
  * Almacena:
  * - Nombre del jugador
  * - Posición actual en el tablero (puntero a Nodo)
- * - Puntaje (número de movimientos realizados - menor es mejor)
+ * - Puntaje número de movimientos realizados
  * - Cantidad de tesoros recolectados
  */
 class Jugador {

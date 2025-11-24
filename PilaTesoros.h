@@ -5,15 +5,12 @@
 #include <stack>
 
 /**
- * Clase PilaTesoros - Pila LIFO para almacenar tesoros
- *
- * Usa std::stack de STL
- * Operaciones:
- * - push: agregar tesoro al tope
- * - pop: remover tesoro del tope
- * - top: ver tesoro del tope
- * - size: cantidad de tesoros
- * - estaVacia: verificar si hay tesoros
+ * Almacenar tesoros
+ * - push agregar tesoro
+ * - pop remover tesoro
+ * - top ver tesoro
+ * - size cantidad de tesoros
+ * - estaVacia verificar si hay tesoros
  */
 class PilaTesoros {
 private:
@@ -23,13 +20,13 @@ public:
     // Constructor por defecto
     PilaTesoros() = default;
 
-    // Agregar tesoro al tope
+    // Agregar tesoro
     void push(const Tesoro& t);
 
-    // Obtener tesoro del tope (sin sacarlo)
+    // Obtener tesoro
     Tesoro top() const;
 
-    // Remover tesoro del tope
+    // Remover tesoro
     void pop();
 
     // Verificar si está vacía

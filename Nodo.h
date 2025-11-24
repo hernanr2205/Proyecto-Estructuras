@@ -7,11 +7,11 @@
  * Clase Nodo - Representa una casilla del tablero
  *
  * Cada nodo conoce:
- * - Su posición (fila, columna)
- * - Su contenido (símbolo)
+ * - Su posición fila, columna
+ * - Su contenido símbolo
  * - Si ha sido descubierta
- * - Si contiene un tesoro (oculto)
- * - Sus 4 vecinos (arriba, abajo, izquierda, derecha)
+ * - Si contiene un tesoro oculto
+ * - Sus 4 vecinos arriba, abajo, izquierda, derecha
  */
 class Nodo {
 private:
@@ -25,7 +25,7 @@ private:
     Nodo* abajo;
     Nodo* izquierda;
     Nodo* derecha;
-    bool esMuroReal;  // NUEVO: indica si hay un muro oculto
+    bool esMuroReal;
 
 public:
     // Constructor
@@ -65,7 +65,7 @@ public:
     bool esMuro() const { return esMuroReal; }  // MODIFICADO
     bool esVacio() const { return simbolo == 'o' || simbolo == ' '; }
 
-    // NUEVO: para manejar muros ocultos
+    // Manejar muros ocultos
     bool tieneRealmenteMuro() const { return esMuroReal; }
     void setMuroOculto(bool valor) { esMuroReal = valor; }
 };

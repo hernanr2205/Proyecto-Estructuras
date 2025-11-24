@@ -5,13 +5,13 @@
 #include <vector>
 
 /**
- * Clase Tablero - Lista múltiplemente enlazada que representa el laberinto
+ * Clase Tablero  Lista múltiplemente enlazada que representa el laberinto
  *
  * Características:
- * - Tamaño: 9x9 casillas
- * - Cada nodo está conectado con sus 4 vecinos (arriba, abajo, izquierda, derecha)
- * - Contiene: paredes (#), espacios vacíos (o), muros (|) y tesoros ocultos
- * - 16 muros colocados aleatoriamente (OCULTOS al inicio)
+ * - Tamaño 9x9 casillas
+ * - Cada nodo está conectado con sus 4 vecinos arriba, abajo, izquierda, derecha
+ * - Contiene paredes #, espacios vacíos o, muros | y tesoros ocultos
+ * - 16 muros colocados aleatoriamente OCULTOS al inicio
  * - 10 tesoros ocultos distribuidos aleatoriamente
  *
  * NO usa arreglos - solo punteros para navegar entre nodos
@@ -50,6 +50,20 @@ public:
 
     // Obtener posiciones vacías (sin muro, sin pared, sin tesoro)
     std::vector<Nodo*> obtenerPosicionesVacias();
+
+    // ⬇️⬇️⬇️ NUEVOS MÉTODOS AGREGADOS ⬇️⬇️⬇️
+
+    // Descubre una casilla (cambia de 'o' a ' ')
+    void descubrirCasilla(int fila, int columna);
+
+    // Vuelve a ocultar todas las casillas descubiertas
+    void taparCasillas();
+
+    // Obtiene una posición aleatoria válida (sin pared, muro o tesoro)
+    Nodo* obtenerPosicionAleatoria();
+
+    // Elimina muros aleatorios (efecto del tesoro Diamante)
+    void eliminarMurosAleatorios(int cantidad);
 
 private:
     // Crear todos los nodos del tablero

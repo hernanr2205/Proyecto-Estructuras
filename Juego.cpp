@@ -4,19 +4,17 @@
 
 /**
  * Constructor del Juego
- * Inicializa los componentes principales
  */
 Juego::Juego() : tablero(nullptr), jugador(nullptr), pilaTesoros(nullptr), tablaPuntajes(nullptr) {
     // Crear el tablero
     tablero = new Tablero();
 
-    // Crear la tabla de puntajes (persiste entre partidas)
+    // Crear la tabla de puntajes
     tablaPuntajes = new TablaHash();
 }
 
 /**
  * Destructor del Juego
- * Libera toda la memoria
  */
 Juego::~Juego() {
     delete tablero;
@@ -64,7 +62,6 @@ void Juego::iniciar() {
 
 /**
  * Inicia una nueva partida
- * MODIFICADO: El jugador aparece en posición ALEATORIA
  */
 void Juego::iniciarNuevoJuego() {
     // Limpiar jugador y pila anteriores si existen
@@ -77,17 +74,17 @@ void Juego::iniciarNuevoJuego() {
         pilaTesoros = nullptr;
     }
 
-    // Crear nuevo tablero
+    // Se crea un tablero nuevo
     delete tablero;
     tablero = new Tablero();
 
-    // Pedir nombre del jugador
+    // Pedimos el nombre
     std::string nombre;
     std::cout << "\n========================================" << std::endl;
     std::cout << "Ingrese su nombre: ";
     std::cin >> nombre;
 
-    // ← CAMBIO: Crear jugador en posición ALEATORIA
+    // Creamos jugador en posición ALEATORIA
     std::vector<Nodo*> posicionesValidas = tablero->obtenerPosicionesVacias();
 
     Nodo* posicionInicial = nullptr;
@@ -97,17 +94,17 @@ void Juego::iniciarNuevoJuego() {
         std::cout << "\nPosicion inicial: (" << posicionInicial->getFila()
                   << ", " << posicionInicial->getColumna() << ")" << std::endl;
     } else {
-        // Fallback: si no hay posiciones vacías, usar (1,1)
+        // si no hay posiciones vacías, usar (1,1)
         posicionInicial = tablero->getNodo(1, 1);
         std::cout << "\nPosicion inicial: (1, 1)" << std::endl;
     }
 
     jugador = new Jugador(nombre, posicionInicial);
 
-    // Crear pila de tesoros
+    // Creamos pila de tesoros
     pilaTesoros = new PilaTesoros();
 
-    // Mostrar instrucciones
+    // instrucciones
     std::cout << "\n========================================" << std::endl;
     std::cout << "       INSTRUCCIONES" << std::endl;
     std::cout << "========================================" << std::endl;
@@ -132,7 +129,7 @@ void Juego::iniciarNuevoJuego() {
 }
 
 /**
- * Loop principal del juego
+ * bucle principal del juego
  */
 void Juego::jugar() {
     char accion;
@@ -151,7 +148,7 @@ void Juego::jugar() {
         std::cout << "Accion (W/A/S/D/X/T/Q): ";
         std::cin >> accion;
 
-        // Convertir a mayúscula
+
         accion = toupper(accion);
 
         // Procesar acción
@@ -179,13 +176,13 @@ void Juego::jugar() {
         }
     }
 
-    // ¡Victoria!
+
     finalizarPartida();
 }
 
 /**
  * Mueve al jugador en una dirección
- * MODIFICADO: Revela los muros cuando el jugador intenta atravesarlos
+ * Se revela los muros cuando el jugador intenta atravesarlos
  */
 void Juego::moverJugador(char direccion) {
     Nodo* posicionActual = jugador->getPosicionActual();
@@ -224,7 +221,7 @@ void Juego::moverJugador(char direccion) {
         return;
     }
 
-    // ← CAMBIO IMPORTANTE: Revelar el muro cuando intentan atravesarlo
+    // Revelar el muro cuando intentan atravesarlo
     if (destino->esMuro()) {
         destino->setSimbolo('|');  // Revelar el muro visualmente
         std::cout << "\n========================================" << std::endl;
@@ -256,7 +253,7 @@ void Juego::moverJugador(char direccion) {
 }
 
 /**
- * Maneja cuando el jugador encuentra un tesoro
+ * Cuando el jugador encuebtra un tesoro
  */
 void Juego::encontrarTesoro(Nodo* nodo) {
     // Obtener tipo de tesoro
@@ -286,7 +283,7 @@ void Juego::encontrarTesoro(Nodo* nodo) {
 }
 
 /**
- * Usa un tesoro de la pila
+ * Usa un tesoro
  */
 void Juego::usarTesoro() {
     // Verificar que haya tesoros
@@ -301,7 +298,7 @@ void Juego::usarTesoro() {
         return;
     }
 
-    // Obtener tesoro del tope
+    // Obtener tesoro
     Tesoro tesoro = pilaTesoros->top();
 
     std::cout << "\n========================================" << std::endl;
@@ -350,8 +347,7 @@ void Juego::aplicarEfectoRubi() {
 }
 
 /**
- * Efecto del Diamante: Elimina 2 muros aleatorios
- * MODIFICADO: Elimina el muro completamente (visual y lógico)
+ * Diamante: Elimina 2 muros aleatorios
  */
 void Juego::aplicarEfectoDiamante() {
     std::vector<Nodo*> muros = tablero->obtenerMuros();
@@ -371,7 +367,7 @@ void Juego::aplicarEfectoDiamante() {
             muro2->setSimbolo(' ');
             muro2->setMuroOculto(false);
 
-            std::cout << "\n¡Diamante poderoso!" << std::endl;
+            std::cout << "\n¡Diamante !" << std::endl;
             std::cout << "Efecto: Elimina 2 muros del tablero" << std::endl;
             std::cout << "Muro 1 eliminado en: (" << muro1->getFila() << ", " << muro1->getColumna() << ")" << std::endl;
             std::cout << "Muro 2 eliminado en: (" << muro2->getFila() << ", " << muro2->getColumna() << ")" << std::endl;
@@ -380,34 +376,34 @@ void Juego::aplicarEfectoDiamante() {
         Nodo* muro = muros[0];
         muro->setSimbolo(' ');
         muro->setMuroOculto(false);
-        std::cout << "\n¡Diamante poderoso!" << std::endl;
+        std::cout << "\n¡Diamante!" << std::endl;
         std::cout << "Efecto: Elimina 1 muro (solo quedaba uno)" << std::endl;
         std::cout << "Muro eliminado en: (" << muro->getFila() << ", " << muro->getColumna() << ")" << std::endl;
     } else {
-        std::cout << "\n¡Diamante poderoso!" << std::endl;
+        std::cout << "\n¡Diamante!" << std::endl;
         std::cout << "Efecto: Elimina 2 muros del tablero" << std::endl;
         std::cout << "No quedan muros para eliminar." << std::endl;
     }
 }
 
 /**
- * Efecto de la Perla: 50% puntaje a 0, 50% duplicar
+ *Perla: 50% puntaje a 0, 50% duplicar
  */
 void Juego::aplicarEfectoPerla() {
     int aleatorio = rand() % 2;  // 0 o 1
     int puntajeAnterior = jugador->getPuntaje();
 
     if (aleatorio == 0) {
-        // ¡Suerte! Puntaje a 0
+        // Puntaje a 0
         jugador->setPuntaje(0);
-        std::cout << "\n¡Perla brillante de la suerte!" << std::endl;
+        std::cout << "\n¡Perla buena!" << std::endl;
         std::cout << "Efecto: Reduce puntaje a 0 (¡buena suerte!)" << std::endl;
         std::cout << "Puntaje: " << puntajeAnterior << " -> 0 movimientos" << std::endl;
     } else {
-        // Mala suerte, duplicar
+        // duplicar
         int puntajeNuevo = puntajeAnterior * 2;
         jugador->setPuntaje(puntajeNuevo);
-        std::cout << "\n¡Perla oscura de la mala suerte!" << std::endl;
+        std::cout << "\n¡Perla mala" << std::endl;
         std::cout << "Efecto: Duplica el puntaje (mala suerte)" << std::endl;
         std::cout << "Puntaje: " << puntajeAnterior << " -> " << puntajeNuevo << " movimientos" << std::endl;
     }
@@ -427,14 +423,14 @@ void Juego::aplicarEfectoAmbar() {
 
         jugador->setPosicionActual(nuevaPosicion);
 
-        std::cout << "\n¡Ambar magico!" << std::endl;
+        std::cout << "\n¡Ambar !" << std::endl;
         std::cout << "Efecto: Teletransporte aleatorio" << std::endl;
         std::cout << "Posicion anterior: (" << posicionAnterior->getFila()
                   << ", " << posicionAnterior->getColumna() << ")" << std::endl;
         std::cout << "Nueva posicion: (" << nuevaPosicion->getFila()
                   << ", " << nuevaPosicion->getColumna() << ")" << std::endl;
     } else {
-        std::cout << "\n¡Ambar magico!" << std::endl;
+        std::cout << "\n¡Ambar !" << std::endl;
         std::cout << "Efecto: Teletransporte aleatorio" << std::endl;
         std::cout << "No hay posiciones disponibles para teletransporte." << std::endl;
     }

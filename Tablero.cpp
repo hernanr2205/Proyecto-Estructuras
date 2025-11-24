@@ -123,7 +123,7 @@ void Tablero::colocarMuros() {
 
         // Solo colocar si la casilla está vacía
         if (nodo->getSimbolo() == 'o' && !nodo->tieneTesoro_()) {
-            nodo->setMuroOculto(true);  // ← CAMBIO: marcar como muro oculto
+            nodo->setMuroOculto(true);  // ← Marcar como muro oculto
             // NO cambiar el símbolo, dejar como 'o'
             murosColocados++;
         }
@@ -226,7 +226,6 @@ void Tablero::mostrarConJugador(Nodo* posicionJugador) const {
 
 /**
  * Obtiene todos los muros del tablero
- * MODIFICADO: Usa tieneRealmenteMuro() en vez de verificar el símbolo
  */
 std::vector<Nodo*> Tablero::obtenerMuros() {
     std::vector<Nodo*> muros;
@@ -236,7 +235,7 @@ std::vector<Nodo*> Tablero::obtenerMuros() {
         Nodo* nodoActual = filaActual;
 
         while (nodoActual != nullptr) {
-            if (nodoActual->tieneRealmenteMuro()) {  // ← CAMBIO
+            if (nodoActual->tieneRealmenteMuro()) {  // ← Verifica el flag interno
                 muros.push_back(nodoActual);
             }
             nodoActual = nodoActual->getDerecha();
@@ -260,10 +259,10 @@ std::vector<Nodo*> Tablero::obtenerPosicionesVacias() {
 
         while (nodoActual != nullptr) {
             // Vacía: no es pared, no es muro, no tiene tesoro
-            if (!nodoActual->esPared() && !nodoActual->esMuro() &&
+            if (!nodoActual->esPared() && !nodoActual->tieneRealmenteMuro() &&
                 !nodoActual->tieneTesoro_()) {
                 vacias.push_back(nodoActual);
-                }
+            }
             nodoActual = nodoActual->getDerecha();
         }
 
@@ -271,4 +270,112 @@ std::vector<Nodo*> Tablero::obtenerPosicionesVacias() {
     }
 
     return vacias;
+}
+
+/**
+ * Descubre una casilla
+ * Se llama cuando el jugador se mueve a una nueva posición
+ */
+void Tablero::descubrirCasilla(int fila, int columna) {
+    Nodo* nodo = getNodo(fila, columna);
+
+    if (nodo == nullptr) return;
+
+    // Si está oculta ('o'), cambiar a espacio (' ')
+    if (nodo->getSimbolo() == 'o') {
+        nodo->setSimbolo(' ');
+        nodo->setDescubierta(true);
+    }
+}
+
+/**
+ * Vuelve a ocultar todas las casillas descubiertas
+ * Se usa cuando el jugador usa un tesoro con 'X'
+ */
+void Tablero::taparCasillas() {
+    Nodo* filaActual = inicio;
+
+    while (filaActual != nullptr) {
+        Nodo* nodoActual = filaActual;
+
+        while (nodoActual != nullptr) {
+            // Si es un espacio vacío descubierto, volverlo a tapar
+            if (nodoActual->getSimbolo() == ' ' && nodoActual->estaDescubierta()) {
+                nodoActual->setSimbolo('o');
+                nodoActual->setDescubierta(false);
+            }
+            nodoActual = nodoActual->getDerecha();
+        }
+
+        filaActual = filaActual->getAbajo();
+    }
+}
+
+/**
+ * Obtiene una posición aleatoria válida en el tablero
+ * No retorna posiciones con pared, muro o tesoro
+ */
+Nodo* Tablero::obtenerPosicionAleatoria() {
+    std::vector<Nodo*> posicionesValidas;
+
+    Nodo* filaActual = inicio;
+    while (filaActual != nullptr) {
+        Nodo* nodoActual = filaActual;
+
+        while (nodoActual != nullptr) {
+            // Posición válida: no es pared, no tiene muro, no tiene tesoro
+            if (!nodoActual->esPared() &&
+                !nodoActual->tieneRealmenteMuro() &&
+                !nodoActual->tieneTesoro_()) {
+                posicionesValidas.push_back(nodoActual);
+            }
+            nodoActual = nodoActual->getDerecha();
+        }
+
+        filaActual = filaActual->getAbajo();
+    }
+
+    // Si no hay posiciones válidas, retornar nullptr
+    if (posicionesValidas.empty()) {
+        return nullptr;
+    }
+
+    // Seleccionar una posición aleatoria
+    int indice = rand() % posicionesValidas.size();
+    return posicionesValidas[indice];
+}
+
+/**
+ * Elimina muros aleatorios del tablero
+ * Efecto del tesoro Diamante
+ */
+void Tablero::eliminarMurosAleatorios(int cantidad) {
+    std::vector<Nodo*> muros = obtenerMuros();
+
+    if (muros.empty()) {
+        std::cout << "No hay muros para eliminar." << std::endl;
+        return;
+    }
+
+    int murosEliminados = 0;
+
+    // Eliminar muros aleatorios
+    while (murosEliminados < cantidad && !muros.empty()) {
+        int indice = rand() % muros.size();
+        Nodo* muro = muros[indice];
+
+        // Desmarcar el muro
+        muro->setMuroOculto(false);
+        muro->setDescubierta(false);
+
+        // Eliminar de la lista para no volver a seleccionarlo
+        muros.erase(muros.begin() + indice);
+        murosEliminados++;
+    }
+
+    if (murosEliminados < cantidad) {
+        std::cout << "Solo se pudieron eliminar " << murosEliminados << " muros." << std::endl;
+    } else {
+        std::cout << "Se eliminaron " << murosEliminados << " muros del laberinto." << std::endl;
+    }
 }
